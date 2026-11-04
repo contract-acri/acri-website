@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin | ACRI — Ahmedabad Centre for Research and Innovation</title>
+<meta name="description" content="ACRI website administration.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://www.acriindia.org/admin">
+<meta name="theme-color" content="#0E2D52">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ahmedabad Centre for Research and Innovation">
+<meta property="og:title" content="Admin">
+<meta property="og:description" content="ACRI website administration.">
+<meta property="og:url" content="https://www.acriindia.org/admin">
+<meta property="og:image" content="https://www.acriindia.org/assets/acri-share.png">
+<meta property="og:locale" content="en_IN">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/acri.css?v=b256611a81">
+
+</head>
+<body>
+<style>
+  body{background:var(--mist)}
+  .a-top{background:var(--navy);color:#fff}
+  .a-top .wrap{display:flex;justify-content:space-between;align-items:center;min-height:72px;gap:1rem}
+  .a-top .lockup .crest{width:44px;height:44px;background-color:#fff;border-radius:50%;background-size:84%}
+  .a-top .lockup .name{color:#fff;font-size:1.05rem}
+  .a-top .lockup .name small{color:var(--green-lt)}
+  .a-who{display:flex;gap:1rem;align-items:center;font-size:.9rem;color:#C9D7E5}
+  .a-who a,.a-who button{background:none;border:1px solid rgba(255,255,255,.4);color:#fff;padding:.4rem .8rem;cursor:pointer;font:600 .85rem var(--sans)}
+  .login{max-width:440px;margin:10vh auto;background:#fff;border:1px solid var(--line);border-top:5px solid var(--navy);padding:2.2rem}
+  .login h1{font-family:var(--serif);font-weight:600;font-size:2rem;margin:.4rem 0 1.4rem}
+  .tabs{display:flex;border-bottom:1px solid var(--line);margin:2rem 0 1.6rem;overflow-x:auto;background:#fff}
+  .tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:.95rem 1.15rem;font:600 .95rem var(--sans);color:var(--muted);cursor:pointer;white-space:nowrap}
+  .tabs button[aria-selected=true]{color:var(--navy);border-bottom-color:var(--green)}
+  .tabs .count{background:var(--navy);color:#fff;border-radius:20px;padding:0 .5rem;font-size:.75rem;margin-left:.4rem}
+  .panel{display:none;padding:0 0 4rem}.panel.on{display:block}
+  .bar{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;justify-content:space-between;margin-bottom:1rem}
+  .bar p{color:var(--muted);max-width:70ch}
+  .bar select,.bar input{font:inherit;padding:.5rem .7rem;border:1px solid #B9C2CB;background:#fff}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin-bottom:1.4rem}
+  .stats div{background:#fff;border:1px solid var(--line);border-top:4px solid var(--navy);padding:1rem 1.2rem}
+  .stats b{display:block;font-size:2rem;font-weight:800;color:var(--navy);line-height:1}
+  .stats span{font-size:.85rem;color:var(--muted)}
+  table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);font-size:.94rem}
+  th{text-align:left;background:var(--mist-2);color:var(--navy);font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;padding:.7rem .8rem}
+  td{padding:.75rem .8rem;border-top:1px solid var(--mist-2);vertical-align:top}
+  tr.click{cursor:pointer}tr.click:hover td{background:#F8FAFB}
+  .tw{overflow-x:auto}
+  .pill{display:inline-block;padding:.15rem .6rem;font-size:.76rem;font-weight:700;border-radius:20px;background:var(--mist-2);color:var(--navy);white-space:nowrap}
+  .pill.Received{background:#E6EEF6;color:#1D4E7A}.pill.Under{background:#FFF3D6;color:#7A5300}
+  .pill.Approved{background:#E4F2D8;color:#2F6A16}.pill.Declined{background:#F9E1DE;color:#9B2219}.pill.Withdrawn{background:#EEE;color:#555}
+  .drawer{position:fixed;inset:0;background:rgba(7,24,45,.5);display:none;z-index:80}
+  .drawer.on{display:block}
+  .drawer .sheet{position:absolute;right:0;top:0;bottom:0;width:min(680px,100%);background:#fff;overflow:auto;padding:2rem;box-shadow:-20px 0 40px -20px rgba(0,0,0,.4)}
+  .drawer h2{font-family:var(--serif);font-weight:600;font-size:1.9rem;margin-bottom:.3rem}
+  .kv{display:grid;grid-template-columns:200px 1fr;gap:.45rem 1rem;font-size:.95rem;margin:1.2rem 0;border-top:1px solid var(--line);padding-top:1rem}
+  .kv dt{font-weight:600;color:var(--navy)}.kv dd{white-space:pre-wrap;word-break:break-word}
+  .x{position:absolute;right:1rem;top:1rem;background:none;border:0;font-size:1.8rem;cursor:pointer;color:var(--muted)}
+  .switch{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;background:#fff;border:1px solid var(--line);padding:1.4rem 1.6rem;margin-bottom:1rem}
+  .switch h3{font-size:1.25rem}.switch p{color:var(--muted);font-size:.92rem}
+  .tog{position:relative;width:62px;height:34px;flex:none}
+  .tog input{opacity:0;width:0;height:0}
+  .tog span{position:absolute;inset:0;background:#C9CED4;border-radius:34px;transition:.2s;cursor:pointer}
+  .tog span::before{content:"";position:absolute;width:26px;height:26px;left:4px;top:4px;background:#fff;border-radius:50%;transition:.2s}
+  .tog input:checked+span{background:var(--bad)}
+  #a-toggle:checked+span{background:var(--green)}
+  .tog input:checked+span::before{transform:translateX(28px)}
+  .live{font-weight:700}.live.on{color:var(--bad)}.live.off{color:var(--ok)}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:.8rem 1.4rem;font-weight:600;z-index:120;display:none;max-width:90vw}
+  .toast.on{display:block}
+  .row-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+  .sm{padding:.4rem .8rem;font-size:.84rem}
+  /* media */
+  .drop-zone{border:2px dashed #AEB8C2;background:#fff;padding:2rem;text-align:center;color:var(--muted);cursor:pointer;transition:.2s;margin-bottom:1.4rem}
+  .drop-zone.over{border-color:var(--green);background:#F2F9EC;color:var(--navy)}
+  .drop-zone b{color:var(--navy)}
+  .mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1rem}
+  .mitem{background:#fff;border:1px solid var(--line);display:flex;flex-direction:column;cursor:pointer;transition:.15s}
+  .mitem:hover{border-color:var(--navy);box-shadow:0 10px 24px -14px rgba(14,45,82,.5)}
+  .mitem .th{aspect-ratio:4/3;background:var(--mist-2) center/cover no-repeat;display:grid;place-items:center;color:var(--muted);font-weight:700}
+  .mitem .meta-sm{padding:.55rem .7rem;font-size:.8rem;color:var(--muted);word-break:break-all;line-height:1.35}
+  .mitem .meta-sm b{display:block;color:var(--text);font-size:.85rem}
+  .mitem.sel{outline:3px solid var(--green)}
+  .pick{display:flex;gap:.8rem;align-items:center}
+  .pick .prev{width:120px;height:80px;flex:none;background:var(--mist-2) center/cover no-repeat;border:1px solid var(--line)}
+  .pick input{flex:1}
+  .progress{height:4px;background:var(--mist-2);margin-top:.6rem;display:none}
+  .progress i{display:block;height:100%;width:0;background:var(--green);transition:width .3s}
+  .slist-a{display:grid;gap:1rem}
+  .srow{display:grid;grid-template-columns:200px 1fr auto;gap:1.2rem;background:#fff;border:1px solid var(--line);padding:1rem;align-items:center}
+  .srow .th{aspect-ratio:16/9;background:var(--mist-2) center/cover no-repeat}
+  .srow h3{font-family:var(--serif);font-weight:600;font-size:1.25rem}
+  .srow p{color:var(--muted);font-size:.9rem}
+  @media(max-width:700px){.kv{grid-template-columns:1fr}.srow{grid-template-columns:1fr}}
+</style>
+
+<header class="a-top"><div class="wrap">
+  <a class="lockup" href="/"><span class="crest logo" role="img" aria-label="ACRI emblem"></span><span class="name">ACRI Website Admin<small>Staff only</small></span></a>
+  <div class="a-who" id="who" hidden><span id="who-name"></span><a href="/" target="_blank">View site</a><button type="button" id="logout">Sign out</button></div>
+</div></header>
+
+<main class="wrap" id="main">
+  <form class="login" id="login" autocomplete="off">
+    <div class="kicker">Restricted</div>
+    <h1>Sign in</h1>
+    <div class="msg err" id="login-msg" role="alert"></div>
+    <div class="field" style="margin-bottom:1rem"><label for="l-name">Your name</label><input id="l-name" required maxlength="60" placeholder="Shown in the activity log"></div>
+    <div class="field" style="margin-bottom:1.4rem"><label for="l-pass">Admin password</label><input id="l-pass" type="password" required></div>
+    <button class="btn navy" type="submit" id="l-btn" style="width:100%">Sign in</button>
+  </form>
+
+  <div id="dash" hidden>
+    <div class="tabs" role="tablist">
+      <button role="tab" aria-selected="true" data-tab="apps">Applications<span class="count" id="c-apps">0</span></button>
+      <button role="tab" aria-selected="false" data-tab="news">News</button>
+      <button role="tab" aria-selected="false" data-tab="slides">Home slides</button>
+      <button role="tab" aria-selected="false" data-tab="pages">Page banners</button>
+      <button role="tab" aria-selected="false" data-tab="media">Media library</button>
+      <button role="tab" aria-selected="false" data-tab="schools">Member schools</button>
+      <button role="tab" aria-selected="false" data-tab="settings">Site settings</button>
+    </div>
+
+    <section class="panel on" id="p-apps">
+      <div class="stats" id="app-stats"></div>
+      <div class="bar"><div style="display:flex;gap:.6rem;flex-wrap:wrap"><select id="f-status"><option value="">All statuses</option></select><input id="f-q" placeholder="Search school, city, email"></div>
+        <button class="btn ghost sm" type="button" data-refresh>Refresh</button></div>
+      <div class="tw"><table><thead><tr><th>Reference</th><th>School</th><th>Location</th><th>Coordinator</th><th>Submitted</th><th>Status</th></tr></thead><tbody id="t-apps"></tbody></table></div>
+    </section>
+
+    <section class="panel" id="p-news">
+      <div class="bar"><p>Published items appear on the home page (latest 3) and on /news. Pinned items stay first. Add a photo to make the card stand out.</p><button class="btn primary sm" type="button" id="news-add">Add news</button></div>
+      <div class="tw"><table><thead><tr><th></th><th>Date</th><th>Title</th><th>Category</th><th>Status</th><th></th></tr></thead><tbody id="t-news"></tbody></table></div>
+    </section>
+
+    <section class="panel" id="p-slides">
+      <div class="bar"><p>The large rotating banner at the top of the home page. Lower "order" shows first. Hidden slides are kept but not shown.</p><button class="btn primary sm" type="button" id="slide-add">Add slide</button></div>
+      <div class="slist-a" id="l-slides"></div>
+    </section>
+
+    <section class="panel" id="p-pages">
+      <div class="bar"><p>Give any page its own banner photo and, if you like, new wording. Leave a field empty to keep the page's built-in text.</p></div>
+      <div class="tw"><table><thead><tr><th></th><th>Page</th><th>Banner title</th><th>Status</th><th></th></tr></thead><tbody id="t-pages"></tbody></table></div>
+    </section>
+
+    <section class="panel" id="p-media">
+      <label class="drop-zone" id="dz"><input type="file" id="file-in" accept="image/jpeg,image/png,image/webp,image/gif,application/pdf" multiple hidden>
+        <b>Drop images here or click to upload</b><br>JPG, PNG, WebP, GIF or PDF. Photos are resized to 2400 px automatically. Stored in Google Drive ("ACRI Website Files") and served at /files/…
+        <div class="progress" id="up-prog"><i></i></div></label>
+      <div class="mgrid" id="g-media"></div>
+    </section>
+
+    <section class="panel" id="p-schools">
+      <div class="bar"><p>Visible schools appear on /school-network. Approving an application can add the school here automatically.</p><button class="btn primary sm" type="button" id="school-add">Add school</button></div>
+      <div class="tw"><table><thead><tr><th>School</th><th>Location</th><th>Code</th><th>Coordinator</th><th>Visible</th><th></th></tr></thead><tbody id="t-schools"></tbody></table></div>
+    </section>
+
+    <section class="panel" id="p-settings">
+      <div class="switch"><div><h3>Maintenance mode</h3><p>When on, every public page shows the maintenance page (HTTP 503, so Google keeps your rankings). This admin keeps working. Status: <span class="live" id="m-live"></span></p></div><label class="tog"><input type="checkbox" id="m-toggle"><span></span></label></div>
+      <div class="switch"><div><h3>School applications</h3><p>Turn off to close the /apply form. Status: <span class="live" id="a-live"></span></p></div><label class="tog"><input type="checkbox" id="a-toggle"><span></span></label></div>
+      <form class="form" id="settings-form"><fieldset><legend>Messages &amp; notifications</legend><div class="fgrid" id="settings-fields"></div>
+        <div style="margin-top:1.2rem"><button class="btn navy" type="submit">Save settings</button></div></fieldset></form>
+      <p style="color:var(--muted);font-size:.9rem;margin-top:1rem">Changes reach the live site within about a minute. Everything here also lives in the Google Sheet, so you can edit it there too.</p>
+    </section>
+  </div>
+</main>
+
+<div class="drawer" id="d-app"><div class="sheet"><button class="x" data-close aria-label="Close">&times;</button><div id="d-app-body"></div></div></div>
+<div class="drawer" id="d-edit"><div class="sheet"><button class="x" data-close aria-label="Close">&times;</button><div id="d-edit-body"></div></div></div>
+<div class="drawer" id="d-pick" style="z-index:90"><div class="sheet" style="width:min(900px,100%)"><button class="x" data-close aria-label="Close">&times;</button>
+  <div class="kicker">Media library</div><h2>Choose an image</h2>
+  <label class="drop-zone" style="margin-top:1rem"><input type="file" id="pick-in" accept="image/jpeg,image/png,image/webp,image/gif" hidden><b>Upload a new image</b> or pick one below<div class="progress" id="pick-prog"><i></i></div></label>
+  <div class="field" style="margin-bottom:1rem"><label>…or paste an image link</label><div class="pick"><input id="pick-url" placeholder="https://"><button class="btn ghost sm" type="button" id="pick-use">Use link</button></div></div>
+  <div class="mgrid" id="g-pick"></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+const API="/api";
+let token=sessionStorage.getItem("acri_admin_token")||"", me=sessionStorage.getItem("acri_admin_name")||"", D=null;
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const truthy=v=>v===true||/^(true|yes|1|on)$/i.test(String(v).trim());
+const toast=(t,ms)=>{const e=$("#toast");e.textContent=t;e.classList.add("on");clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("on"),ms||2800)};
+const PAGES=[["/about","About ACRI"],["/research","Research & Innovation"],["/beyond-2030","Beyond 2030"],["/beyond-un","Beyond UN"],["/governance","Governance"],["/structure","Institutional Structure"],["/external-affairs","Office of External Affairs"],["/publishing","Publishing"],["/school-research-network","School Research Network"],["/apply","Apply"],["/school-network","Our School Network"],["/thinkers-lab","Thinkers Lab"],["/news","News"],["/trademark","Trademark & IP"],["/sitemap","Sitemap"]];
+
+async function call(action,extra){
+  const r=await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(Object.assign({action,token},extra||{}))});
+  let d; try{d=await r.json()}catch(e){throw new Error("Server error ("+r.status+")")}
+  if(d.auth===false){signOut();throw new Error(d.error)}
+  if(!d.ok)throw new Error(d.error||"Request failed");
+  return d;
+}
+
+/* image URL helpers */
+const fileBySlug=slug=>D&&D.files.find(f=>String(f.Slug)===String(slug).replace(/^\/?files\//,""));
+function thumb(v){ // preview URL for an image field value
+  const s=String(v||"").trim(); if(!s)return"";
+  if(/^https:\/\//i.test(s))return s;
+  const f=fileBySlug(s); if(f&&/^image\//.test(f.Type))return "https://drive.google.com/thumbnail?id="+encodeURIComponent(f["Drive File ID"])+"&sz=w600";
+  return "/files/"+s.replace(/^\/?files\//,"");
+}
+
+/* ---- auth ---- */
+$("#login").addEventListener("submit",async e=>{
+  e.preventDefault();const m=$("#login-msg"),b=$("#l-btn");m.classList.remove("show");b.disabled=true;b.textContent="Signing in…";
+  try{const d=await call("admin.login",{name:$("#l-name").value,password:$("#l-pass").value});
+    token=d.token;me=d.name;sessionStorage.setItem("acri_admin_token",token);sessionStorage.setItem("acri_admin_name",me);start();}
+  catch(err){m.textContent=err.message;m.classList.add("show")}
+  finally{b.disabled=false;b.textContent="Sign in"}
+});
+function signOut(){if(token)fetch(API,{method:"POST",body:JSON.stringify({action:"admin.logout",token})}).catch(()=>{});
+  token="";sessionStorage.clear();$("#dash").hidden=true;$("#who").hidden=true;$("#login").hidden=false;}
+$("#logout").onclick=signOut;
+async function start(){$("#login").hidden=true;$("#dash").hidden=false;$("#who").hidden=false;$("#who-name").textContent=me;await load();}
+async function load(){try{D=await call("admin.data");D.files=D.files||[];D.slides=D.slides||[];D.pages=D.pages||[];renderAll()}catch(e){toast(e.message)}}
+$$("[data-refresh]").forEach(b=>b.onclick=()=>load().then(()=>toast("Refreshed")));
+
+/* ---- tabs & drawers ---- */
+$$("[data-tab]").forEach(b=>b.onclick=()=>{$$("[data-tab]").forEach(x=>x.setAttribute("aria-selected",x===b));$$(".panel").forEach(p=>p.classList.toggle("on",p.id==="p-"+b.dataset.tab));});
+$$("[data-close]").forEach(b=>b.onclick=()=>b.closest(".drawer").classList.remove("on"));
+$$(".drawer").forEach(d=>d.addEventListener("click",e=>{if(e.target===d)d.classList.remove("on")}));
+function renderAll(){renderApps();renderNews();renderSlides();renderPages();renderMedia();renderSchools();renderSettings();}
+
+/* ================= uploads ================= */
+function readAsDataURL(blob){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(blob)})}
+async function prepare(file){ // resize photos to max 2400px, keep PNG/GIF/PDF as they are when small
+  if(!/^image\/(jpeg|png|webp)$/.test(file.type)||(file.type!=="image/jpeg"&&file.size<1.5e6))return {blob:file,type:file.type,name:file.name};
+  const url=URL.createObjectURL(file);
+  try{
+    const im=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=url});
+    const k=Math.min(1,2400/Math.max(im.naturalWidth,im.naturalHeight));
+    if(k===1&&file.type==="image/jpeg"&&file.size<2.5e6)return {blob:file,type:file.type,name:file.name};
+    const c=document.createElement("canvas");c.width=Math.round(im.naturalWidth*k);c.height=Math.round(im.naturalHeight*k);
+    const g=c.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,c.width,c.height);g.drawImage(im,0,0,c.width,c.height);
+    const blob=await new Promise(r=>c.toBlob(r,"image/jpeg",.85));
+    return {blob,type:"image/jpeg",name:file.name.replace(/\.[^.]+$/,"")+".jpg"};
+  }finally{URL.revokeObjectURL(url)}
+}
+async function upload(files,prog){
+  const bar=prog&&prog.querySelector("i");let done=0,last=null;
+  if(prog){prog.style.display="block";bar.style.width="5%"}
+  for(const f of files){
+    try{
+      if(f.size>25e6)throw new Error(f.name+" is too large");
+      const p=await prepare(f);
+      if(p.blob.size>8e6)throw new Error(f.name+" is larger than 8 MB after resizing");
+      const data=(await readAsDataURL(p.blob)).split(",")[1];
+      const alt=f.name.replace(/\.[^.]+$/,"").replace(/[-_]+/g," ");
+      last=await call("admin.uploadFile",{name:p.name,type:p.type,data,alt});
+      toast("Uploaded "+f.name);
+    }catch(e){toast(e.message,4000)}
+    done++; if(bar)bar.style.width=(done/files.length*100)+"%";
+  }
+  if(prog)setTimeout(()=>{prog.style.display="none";bar.style.width="0"},600);
+  await load();
+  return last;
+}
+const dz=$("#dz");
+$("#file-in").onchange=e=>{upload([...e.target.files],$("#up-prog"));e.target.value=""};
+["dragenter","dragover"].forEach(t=>dz.addEventListener(t,e=>{e.preventDefault();dz.classList.add("over")}));
+["dragleave","drop"].forEach(t=>dz.addEventListener(t,e=>{e.preventDefault();dz.classList.remove("over")}));
+dz.addEventListener("drop",e=>upload([...e.dataTransfer.files],$("#up-prog")));
+
+/* ================= media library ================= */
+function mediaCard(f){
+  const isImg=/^image\//.test(f.Type);
+  const th=isImg?`style="background-image:url('${thumb(f.Slug)}')"`:"";
+  return `<div class="mitem" data-slug="${esc(f.Slug)}"><div class="th" ${th}>${isImg?"":"PDF"}</div><div class="meta-sm"><b>${esc(f["Alt Text"]||f["Original Name"]||f.Slug)}</b>/files/${esc(f.Slug)}<br>${esc(f["Size (KB)"])} KB · ${esc(String(f["Uploaded At"]).slice(0,10))}</div></div>`;
+}
+function renderMedia(){
+  $("#g-media").innerHTML=D.files.length?D.files.map(mediaCard).join(""):'<p class="empty">No uploads yet.</p>';
+  $$("#g-media .mitem").forEach(m=>m.onclick=()=>editFile(fileBySlug(m.dataset.slug)));
+}
+function editFile(f){
+  const url=location.origin+"/files/"+f.Slug;
+  $("#d-edit-body").innerHTML=`<div class="kicker">Media</div><h2>${esc(f["Original Name"]||f.Slug)}</h2>
+   ${/^image\//.test(f.Type)?`<img src="${thumb(f.Slug)}" alt="" style="width:100%;max-height:360px;object-fit:contain;background:var(--mist);margin:1rem 0">`:""}
+   <div class="field" style="margin-bottom:1rem"><label>Link on your site</label><div class="pick"><input id="f-url" value="${esc(url)}" readonly><button class="btn ghost sm" type="button" id="f-copy">Copy</button></div><div class="hint">Use this anywhere on the site. Files are cached at the edge, so they load fast.</div></div>
+   <form class="form" id="file-form"><div class="fgrid">
+    <div class="field full"><label>Alt text (describe the image for screen readers &amp; Google)</label><input id="f-alt" maxlength="300" value="${esc(f["Alt Text"])}"></div>
+    <div class="field full"><label>Photo credit (optional)</label><input id="f-credit" maxlength="200" value="${esc(f.Credit)}"></div>
+   </div><div class="row-actions" style="margin-top:1.2rem"><button class="btn navy" type="submit">Save</button><button class="btn ghost" type="button" id="f-del">Delete file</button></div></form>`;
+  $("#d-edit").classList.add("on");
+  $("#f-copy").onclick=()=>{navigator.clipboard.writeText(url).then(()=>toast("Link copied"))};
+  $("#file-form").onsubmit=async e=>{e.preventDefault();try{await call("admin.saveFile",{slug:f.Slug,alt:$("#f-alt").value,credit:$("#f-credit").value});$("#d-edit").classList.remove("on");toast("Saved");load()}catch(err){toast(err.message)}};
+  $("#f-del").onclick=async()=>{const used=[...D.slides.map(s=>s.Image),...D.pages.map(p=>p.Image),...D.news.map(n=>n.Image)].some(v=>String(v||"").includes(f.Slug));
+    if(!confirm(used?"This image is in use on the site. Delete anyway?":"Delete this file?"))return;
+    try{await call("admin.deleteFile",{slug:f.Slug});$("#d-edit").classList.remove("on");toast("Deleted");load()}catch(err){toast(err.message)}};
+}
+
+/* image picker (used by news, slides, banners) */
+let pickCb=null;
+function openPicker(cb){
+  pickCb=cb;
+  const imgs=D.files.filter(f=>/^image\//.test(f.Type));
+  $("#g-pick").innerHTML=imgs.length?imgs.map(mediaCard).join(""):'<p class="empty">No images yet. Upload one above.</p>';
+  $$("#g-pick .mitem").forEach(m=>m.onclick=()=>{pickCb("/files/"+m.dataset.slug);$("#d-pick").classList.remove("on")});
+  $("#pick-url").value="";
+  $("#d-pick").classList.add("on");
+}
+$("#pick-use").onclick=()=>{const v=$("#pick-url").value.trim();if(!/^https:\/\//.test(v)){toast("Paste a full https:// link");return}pickCb(v);$("#d-pick").classList.remove("on")};
+$("#pick-in").onchange=async e=>{const f=[...e.target.files];e.target.value="";const r=await upload(f,$("#pick-prog"));if(r&&r.url){pickCb(r.url);$("#d-pick").classList.remove("on")}};
+function pickerField(id,label,value){
+  return `<div class="field full"><label>${label}</label><div class="pick"><span class="prev" id="${id}-prev" style="background-image:url('${esc(thumb(value))}')"></span><input id="${id}" value="${esc(value)}" placeholder="Choose from the library or paste a link"><button class="btn ghost sm" type="button" data-pick="${id}">Choose…</button></div></div>`;
+}
+function wirePickers(){
+  $$("[data-pick]").forEach(b=>b.onclick=()=>openPicker(v=>{const i=document.getElementById(b.dataset.pick);i.value=v;document.getElementById(b.dataset.pick+"-prev").style.backgroundImage=`url('${thumb(v)}')`}));
+  $$(".pick input[id]").forEach(i=>i.oninput=()=>{const p=document.getElementById(i.id+"-prev");if(p)p.style.backgroundImage=`url('${thumb(i.value)}')`});
+}
+
+/* ================= applications ================= */
+const pill=s=>`<span class="pill ${esc(String(s).split(" ")[0])}">${esc(s)}</span>`;
+function renderApps(){
+  const sel=$("#f-status");if(sel.options.length<2)D.statuses.forEach(s=>sel.add(new Option(s,s)));
+  const st=sel.value,q=$("#f-q").value.toLowerCase();
+  const list=D.applications.filter(a=>(!st||a.Status===st)&&(!q||JSON.stringify(a).toLowerCase().includes(q)));
+  const count=s=>D.applications.filter(a=>a.Status===s).length;
+  $("#c-apps").textContent=count("Received");
+  $("#app-stats").innerHTML=`<div><b>${D.applications.length}</b><span>Total applications</span></div>`+D.statuses.slice(0,4).map(s=>`<div><b>${count(s)}</b><span>${s}</span></div>`).join("");
+  $("#t-apps").innerHTML=list.length?list.map(a=>`<tr class="click" data-id="${esc(a["Application ID"])}"><td><b>${esc(a["Application ID"])}</b></td><td>${esc(a["School Name"])}</td><td>${esc(a.City)}, ${esc(a.State)}</td><td>${esc(a["Coordinator Name"])}<br><small>${esc(a["Coordinator Email"])}</small></td><td>${esc(a["Submitted At"])}</td><td>${pill(a.Status)}</td></tr>`).join(""):`<tr><td colspan="6" class="empty">No applications match.</td></tr>`;
+  $$("#t-apps tr.click").forEach(r=>r.onclick=()=>openApp(r.dataset.id));
+}
+$("#f-status").onchange=renderApps;$("#f-q").oninput=renderApps;
+const APP_FIELDS=["School Name","Board / Curriculum","City","State","Country","Address","School Website","Principal Name","Coordinator Name","Coordinator Designation","Coordinator Email","Coordinator Phone","Approx. Students Interested","Preferred Programme","Statement of Interest","Submitted At","Updated At","Updated By"];
+function openApp(id){
+  const a=D.applications.find(x=>String(x["Application ID"])===id);if(!a)return;
+  const dl=APP_FIELDS.filter(f=>a[f]!==""&&a[f]!=null).map(f=>`<dt>${esc(f)}</dt><dd>${f==="Coordinator Email"?`<a href="mailto:${esc(a[f])}">${esc(a[f])}</a>`:esc(a[f])}</dd>`).join("");
+  $("#d-app-body").innerHTML=`<div class="kicker">${esc(a["Application ID"])}</div><h2>${esc(a["School Name"])}</h2>${pill(a.Status)}<dl class="kv">${dl}</dl>
+  <form class="form" id="app-form"><fieldset><legend>Decision</legend><div class="fgrid">
+   <div class="field"><label for="ap-status">Status</label><select id="ap-status">${D.statuses.map(s=>`<option ${s===a.Status?"selected":""}>${s}</option>`).join("")}</select></div>
+   <div class="field"><label for="ap-code">School Code</label><input id="ap-code" value="${esc(a["School Code"])}" placeholder="e.g. IN-GJ380057-ABC"></div>
+   <div class="field full"><label for="ap-notes">Reviewer notes (internal)</label><textarea id="ap-notes" style="min-height:110px">${esc(a["Reviewer Notes"])}</textarea></div>
+   <div class="field full"><label class="check"><input type="checkbox" id="ap-notify" checked> <span>Email the coordinator if the status changes</span></label></div>
+   <div class="field full"><label class="check"><input type="checkbox" id="ap-add" checked> <span>If approved, add the school to the public School Network list</span></label></div>
+  </div><div style="margin-top:1.2rem"><button class="btn navy" type="submit">Save decision</button></div></fieldset></form>`;
+  $("#d-app").classList.add("on");
+  $("#app-form").onsubmit=async e=>{e.preventDefault();const b=e.target.querySelector("button");b.disabled=true;
+    try{await call("admin.updateApplication",{id,status:$("#ap-status").value,schoolCode:$("#ap-code").value,notes:$("#ap-notes").value,notify:$("#ap-notify").checked,addToNetwork:$("#ap-add").checked});
+      $("#d-app").classList.remove("on");toast("Application updated");await load();}catch(err){toast(err.message)}finally{b.disabled=false}};
+}
+
+/* ================= news ================= */
+function renderNews(){
+  const list=D.news.slice().sort((a,b)=>String(b.Date).localeCompare(String(a.Date)));
+  $("#t-news").innerHTML=list.length?list.map(n=>`<tr><td style="width:90px">${n.Image?`<span class="pick"><span class="prev" style="width:80px;height:54px;background-image:url('${esc(thumb(n.Image))}')"></span></span>`:""}</td><td>${esc(String(n.Date).slice(0,10))}</td><td><b>${esc(n.Title)}</b><br><small>${esc(n.Summary)}</small></td><td>${esc(n.Category)}</td><td>${truthy(n.Published)?'<span class="pill Approved">Published</span>':'<span class="pill Withdrawn">Hidden</span>'}${truthy(n.Pinned)?' <span class="pill Under">Pinned</span>':""}</td><td class="row-actions"><button class="btn ghost sm" data-edit="${esc(n.ID)}">Edit</button><button class="btn ghost sm" data-del="${esc(n.ID)}">Delete</button></td></tr>`).join(""):`<tr><td colspan="6" class="empty">No news yet.</td></tr>`;
+  $$("[data-edit]").forEach(b=>b.onclick=()=>editNews(D.news.find(n=>String(n.ID)===b.dataset.edit)));
+  $$("[data-del]").forEach(b=>b.onclick=async()=>{if(!confirm("Delete this news item?"))return;try{await call("admin.deleteNews",{id:b.dataset.del});toast("Deleted");load()}catch(e){toast(e.message)}});
+}
+$("#news-add").onclick=()=>editNews(null);
+function editNews(n){
+  n=n||{Published:true};
+  $("#d-edit-body").innerHTML=`<div class="kicker">News</div><h2>${n.ID?"Edit item":"Add news"}</h2>
+  <form class="form" id="news-form" style="margin-top:1rem"><div class="fgrid">
+   <div class="field full"><label>Title <i>*</i></label><input id="n-title" required maxlength="200" value="${esc(n.Title)}"></div>
+   <div class="field"><label>Date</label><input id="n-date" type="date" value="${esc(String(n.Date||new Date().toISOString()).slice(0,10))}"></div>
+   <div class="field"><label>Category</label><input id="n-cat" maxlength="60" value="${esc(n.Category)}" placeholder="Research, Publishing, Schools…" list="cats"><datalist id="cats"><option>Research</option><option>Publishing</option><option>Schools</option><option>Students</option><option>Events</option><option>Institutional</option></datalist></div>
+   ${pickerField("n-img","Photo (recommended)",n.Image||"")}
+   <div class="field full"><label>Summary</label><textarea id="n-sum" maxlength="600" style="min-height:100px">${esc(n.Summary)}</textarea></div>
+   <div class="field full"><label>Link (where the card goes)</label><input id="n-link" maxlength="400" value="${esc(n.Link)}" placeholder="/beyond-2030 or https://…"></div>
+   <div class="field"><label class="check"><input type="checkbox" id="n-pub" ${truthy(n.Published)?"checked":""}> <span>Published</span></label></div>
+   <div class="field"><label class="check"><input type="checkbox" id="n-pin" ${truthy(n.Pinned)?"checked":""}> <span>Pinned to top</span></label></div>
+  </div><div style="margin-top:1.2rem"><button class="btn navy" type="submit">Save</button></div></form>`;
+  $("#d-edit").classList.add("on");wirePickers();
+  $("#news-form").onsubmit=async e=>{e.preventDefault();try{await call("admin.saveNews",{item:{id:n.ID,title:$("#n-title").value,date:$("#n-date").value,category:$("#n-cat").value,summary:$("#n-sum").value,link:$("#n-link").value,image:$("#n-img").value.trim(),published:$("#n-pub").checked,pinned:$("#n-pin").checked}});
+    $("#d-edit").classList.remove("on");toast("Saved");load()}catch(err){toast(err.message)}};
+}
+
+/* ================= home slides ================= */
+function renderSlides(){
+  $("#l-slides").innerHTML=D.slides.length?D.slides.map(s=>`<div class="srow"><div class="th" style="background-image:url('${esc(thumb(s.Image))}')"></div><div><span class="meta">Order ${esc(s.Order)} · ${truthy(s.Visible)?"Visible":"Hidden"}</span><h3>${esc(s.Title)}</h3><p>${esc(s.Text)}</p></div><div class="row-actions"><button class="btn ghost sm" data-sedit="${esc(s.ID)}">Edit</button><button class="btn ghost sm" data-sdel="${esc(s.ID)}">Delete</button></div></div>`).join(""):'<p class="empty">No slides: the home page shows its built-in banners.</p>';
+  $$("[data-sedit]").forEach(b=>b.onclick=()=>editSlide(D.slides.find(s=>String(s.ID)===b.dataset.sedit)));
+  $$("[data-sdel]").forEach(b=>b.onclick=async()=>{if(!confirm("Delete this slide?"))return;try{await call("admin.deleteSlide",{id:b.dataset.sdel});toast("Deleted");load()}catch(e){toast(e.message)}});
+}
+$("#slide-add").onclick=()=>editSlide(null);
+function editSlide(s){
+  s=s||{Visible:true,Order:(D.slides.length+1)};
+  $("#d-edit-body").innerHTML=`<div class="kicker">Home slide</div><h2>${s.ID?"Edit slide":"Add slide"}</h2>
+  <form class="form" id="slide-form" style="margin-top:1rem"><div class="fgrid">
+   ${pickerField("s-img","Banner photo (wide, at least 1600 px)",s.Image||"")}
+   <div class="field"><label>Small label above the title</label><input id="s-kick" maxlength="80" value="${esc(s.Kicker)}"></div>
+   <div class="field"><label>Order</label><input id="s-order" type="number" min="1" value="${esc(s.Order)}"></div>
+   <div class="field full"><label>Title <i>*</i></label><input id="s-title" maxlength="160" value="${esc(s.Title)}"></div>
+   <div class="field full"><label>Text</label><textarea id="s-text" maxlength="400" style="min-height:90px">${esc(s.Text)}</textarea></div>
+   <div class="field"><label>Button text</label><input id="s-ll" maxlength="60" value="${esc(s["Link Label"])}" placeholder="Learn more"></div>
+   <div class="field"><label>Button link</label><input id="s-link" maxlength="400" value="${esc(s.Link)}" placeholder="/about"></div>
+   <div class="field full"><label class="check"><input type="checkbox" id="s-vis" ${truthy(s.Visible)?"checked":""}> <span>Visible on the home page</span></label></div>
+  </div><div style="margin-top:1.2rem"><button class="btn navy" type="submit">Save slide</button></div></form>`;
+  $("#d-edit").classList.add("on");wirePickers();
+  $("#slide-form").onsubmit=async e=>{e.preventDefault();try{await call("admin.saveSlide",{item:{id:s.ID,image:$("#s-img").value.trim(),kicker:$("#s-kick").value,order:$("#s-order").value,title:$("#s-title").value,text:$("#s-text").value,linkLabel:$("#s-ll").value,link:$("#s-link").value,visible:$("#s-vis").checked}});
+    $("#d-edit").classList.remove("on");toast("Slide saved");load()}catch(err){toast(err.message)}};
+}
+
+/* ================= page banners ================= */
+const pageRow=path=>D.pages.find(p=>"/"+String(p.Path).replace(/^\/+|\/+$/g,"")===path);
+function renderPages(){
+  $("#t-pages").innerHTML=PAGES.map(([path,name])=>{const p=pageRow(path);return `<tr><td style="width:110px">${p&&p.Image?`<span class="pick"><span class="prev" style="width:96px;height:60px;background-image:url('${esc(thumb(p.Image))}')"></span></span>`:""}</td><td><b>${esc(name)}</b><br><small><a href="${path}" target="_blank">${path}</a></small></td><td>${esc(p&&p.Title||"")}</td><td>${p?'<span class="pill Approved">Custom</span>':'<span class="pill">Default</span>'}</td><td class="row-actions"><button class="btn ghost sm" data-pedit="${path}">Edit</button>${p?`<button class="btn ghost sm" data-preset="${path}">Reset</button>`:""}</td></tr>`}).join("");
+  $$("[data-pedit]").forEach(b=>b.onclick=()=>editPage(b.dataset.pedit));
+  $$("[data-preset]").forEach(b=>b.onclick=async()=>{if(!confirm("Reset this page to its built-in banner?"))return;try{await call("admin.deletePage",{path:b.dataset.preset});toast("Reset");load()}catch(e){toast(e.message)}});
+}
+function editPage(path){
+  const p=pageRow(path)||{};const name=(PAGES.find(x=>x[0]===path)||[,path])[1];
+  $("#d-edit-body").innerHTML=`<div class="kicker">Page banner</div><h2>${esc(name)}</h2><p style="color:var(--muted)">${esc(path)} · leave text empty to keep the page's built-in wording.</p>
+  <form class="form" id="page-form" style="margin-top:1rem"><div class="fgrid">
+   ${pickerField("p-img","Banner photo (wide, at least 1600 px)",p.Image||"")}
+   <div class="field full"><label>Photo credit (optional)</label><input id="p-credit" maxlength="200" value="${esc(p.Credit)}"></div>
+   <div class="field full"><label>Small label</label><input id="p-kick" maxlength="80" value="${esc(p.Kicker)}"></div>
+   <div class="field full"><label>Title</label><input id="p-title" maxlength="160" value="${esc(p.Title)}"></div>
+   <div class="field full"><label>Introduction</label><textarea id="p-lead" maxlength="500" style="min-height:90px">${esc(p.Lead)}</textarea></div>
+  </div><div style="margin-top:1.2rem"><button class="btn navy" type="submit">Save banner</button></div></form>`;
+  $("#d-edit").classList.add("on");wirePickers();
+  $("#page-form").onsubmit=async e=>{e.preventDefault();try{await call("admin.savePage",{item:{path,image:$("#p-img").value.trim(),credit:$("#p-credit").value,kicker:$("#p-kick").value,title:$("#p-title").value,lead:$("#p-lead").value}});
+    $("#d-edit").classList.remove("on");toast("Banner saved (live within a minute)");load()}catch(err){toast(err.message)}};
+}
+
+/* ================= schools ================= */
+function renderSchools(){
+  $("#t-schools").innerHTML=D.schools.length?D.schools.map(s=>`<tr><td><b>${esc(s["School Name"])}</b></td><td>${esc(s.City)}, ${esc(s.State)}</td><td>${esc(s["School Code"])}</td><td>${esc(s["School Research Coordinator"])}</td><td>${truthy(s.Visible)?"Yes":"No"}</td><td><button class="btn ghost sm" data-scedit="${esc(s.ID)}">Edit</button></td></tr>`).join(""):`<tr><td colspan="6" class="empty">No schools yet.</td></tr>`;
+  $$("[data-scedit]").forEach(b=>b.onclick=()=>editSchool(D.schools.find(s=>String(s.ID)===b.dataset.scedit)));
+}
+$("#school-add").onclick=()=>editSchool(null);
+function editSchool(s){
+  s=s||{Visible:true,Country:"India"};
+  const f=(id,label,key,full)=>`<div class="field${full?" full":""}"><label>${label}</label><input id="${id}" value="${esc(s[key])}"></div>`;
+  $("#d-edit-body").innerHTML=`<div class="kicker">Member school</div><h2>${s.ID?"Edit school":"Add school"}</h2>
+  <form class="form" id="school-form" style="margin-top:1rem"><div class="fgrid">
+   ${f("sc-name","School name *","School Name",true)}${f("sc-city","City","City")}${f("sc-state","State","State")}${f("sc-country","Country","Country")}${f("sc-code","School Code","School Code")}
+   ${f("sc-pr","Principal","Principal")}${f("sc-co","School Research Coordinator","School Research Coordinator")}${f("sc-addr","Address","Address",true)}
+   <div class="field full"><label class="check"><input type="checkbox" id="sc-vis" ${truthy(s.Visible)?"checked":""}> <span>Visible on the public School Network page</span></label></div>
+  </div><div style="margin-top:1.2rem"><button class="btn navy" type="submit">Save</button></div></form>`;
+  $("#d-edit").classList.add("on");
+  $("#school-form").onsubmit=async e=>{e.preventDefault();try{await call("admin.saveSchool",{item:{id:s.ID,name:$("#sc-name").value,city:$("#sc-city").value,state:$("#sc-state").value,country:$("#sc-country").value,code:$("#sc-code").value,principal:$("#sc-pr").value,coordinator:$("#sc-co").value,address:$("#sc-addr").value,visible:$("#sc-vis").checked}});
+    $("#d-edit").classList.remove("on");toast("Saved");load()}catch(err){toast(err.message)}};
+}
+
+/* ================= settings ================= */
+function setting(k){const s=D.settings.find(x=>x.key===k);return s?s.value:""}
+function renderSettings(){
+  const m=truthy(setting("MAINTENANCE_MODE")),a=truthy(setting("APPLICATIONS_OPEN")||"TRUE");
+  $("#m-toggle").checked=m;$("#m-live").textContent=m?"ON: public site is offline":"OFF: site is live";$("#m-live").className="live "+(m?"on":"off");
+  $("#a-toggle").checked=a;$("#a-live").textContent=a?"Open":"Closed";$("#a-live").className="live "+(a?"off":"on");
+  const fields=D.settings.filter(s=>!["MAINTENANCE_MODE","APPLICATIONS_OPEN"].includes(s.key));
+  $("#settings-fields").innerHTML=fields.map(s=>`<div class="field full"><label for="st-${s.key}">${esc(s.key.replace(/_/g," ").toLowerCase().replace(/^./,c=>c.toUpperCase()))}</label>${s.key==="MAINTENANCE_MESSAGE"?`<textarea id="st-${s.key}" style="min-height:90px">${esc(s.value)}</textarea>`:`<input id="st-${s.key}" value="${esc(s.value)}">`}<div class="hint">${esc(s.notes)}</div></div>`).join("");
+}
+async function saveSettings(values,msg){try{await call("admin.saveSettings",{values});toast(msg);await load()}catch(e){toast(e.message);await load()}}
+$("#m-toggle").onchange=e=>{const on=e.target.checked;if(on&&!confirm("Put the whole public website into maintenance mode?")){e.target.checked=false;return}
+  saveSettings({MAINTENANCE_MODE:on?"TRUE":"FALSE"},on?"Maintenance mode ON (live within ~1 min)":"Site is live again (within ~1 min)")};
+$("#a-toggle").onchange=e=>saveSettings({APPLICATIONS_OPEN:e.target.checked?"TRUE":"FALSE"},e.target.checked?"Applications opened":"Applications closed");
+$("#settings-form").onsubmit=e=>{e.preventDefault();const v={};D.settings.forEach(s=>{const el=document.getElementById("st-"+s.key);if(el)v[s.key]=el.value});saveSettings(v,"Settings saved")};
+
+if(token)start();
+})();
+</script>
+
+</body>
+</html>
