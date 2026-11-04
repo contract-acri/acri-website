@@ -88,15 +88,18 @@ section{padding:clamp(56px,7vw,96px) 0}
 .hero .dots button{width:44px;height:4px;border:0;background:rgba(255,255,255,.45);cursor:pointer;padding:0}
 .hero .dots button.on{background:#fff}
 
-/* ===== inner page hero (photo + navy box) ===== */
+/* ===== inner page hero (photo + navy box, in normal flow so it never overlaps content) ===== */
 .phero{padding:0;position:relative}
-.phero .ph{height:clamp(300px,46vh,460px)}
-.phero .hbox{bottom:auto;top:clamp(120px,22vh,220px);width:min(720px,calc(100% - 2*var(--g)))}
-.phero .hbox h1{font-size:clamp(2rem,3.6vw,3.1rem)}
-.phero .spacer{height:clamp(90px,14vh,150px)}
+.phero .ph{height:clamp(240px,38vh,420px)}
+.phero .hbox{position:relative;top:auto;bottom:auto;left:auto;z-index:3;
+  margin:calc(-1 * clamp(100px,15vh,170px)) 0 0 max(var(--g),calc((100vw - var(--max))/2 + var(--g)));
+  width:min(760px,calc(100% - 2*var(--g)))}
+.phero .hbox h1{font-size:clamp(2rem,3.4vw,3rem)}
+.phero .spacer{display:none}
 .crumbs{font-size:.84rem;color:#B9C9D9;margin-bottom:.7rem}
 .crumbs a{color:#fff}.crumbs a:hover{text-decoration:underline}
-.phero .badge{position:absolute;right:max(var(--g),calc((100vw - var(--max))/2 + var(--g)));top:clamp(120px,22vh,220px);width:170px;aspect-ratio:1;background-color:#fff;background-size:82%;z-index:3;box-shadow:0 20px 40px -20px rgba(0,0,0,.5)}
+.phero .badge{position:absolute;right:max(var(--g),calc((100vw - var(--max))/2 + var(--g)));top:clamp(32px,6vh,72px);width:clamp(120px,12vw,170px);aspect-ratio:1;background-color:#fff;background-size:82%;z-index:3;box-shadow:0 20px 40px -20px rgba(0,0,0,.5)}
+.phero + section{padding-top:clamp(48px,6vw,80px)}
 
 /* ===== intro / facts ===== */
 .intro{padding:clamp(48px,6vw,80px) 0;border-bottom:1px solid var(--line)}
@@ -366,9 +369,8 @@ a.lcard:hover{box-shadow:0 20px 40px -24px rgba(14,45,82,.4);border-color:var(--
   .hero .frame{height:auto;min-height:620px}
   .hero .hbox{left:var(--g);right:var(--g);width:auto;bottom:56px}
   .hero .dots{left:var(--g);right:auto;bottom:24px}
-  .phero .ph{height:260px}
-  .phero .hbox{position:relative;top:auto;left:auto;width:auto;margin:-80px var(--g) 0}
-  .phero .spacer{height:40px}
+  .phero .ph{height:240px}
+  .phero .hbox{width:auto;margin:-80px var(--g) 0}
   .phero .badge{display:none}
   .shead,.sec-head{flex-direction:column;align-items:flex-start;gap:.8rem}
   .timeline{grid-template-columns:1fr 1fr}
