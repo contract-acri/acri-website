@@ -1,0 +1,255 @@
+<style>
+  body{background:var(--stone)}
+  .a-top{background:var(--navy);color:#fff}
+  .a-top .wrap{display:flex;justify-content:space-between;align-items:center;min-height:70px;gap:1rem}
+  .a-top .brand .crest{width:44px;height:44px}
+  .a-top .brand .name{font-size:1.1rem}
+  .a-who{display:flex;gap:1rem;align-items:center;font-size:.9rem;color:#C9D3DC}
+  .a-who button{background:none;border:1px solid rgba(255,255,255,.4);color:#fff;padding:.4rem .8rem;cursor:pointer;font:600 .85rem var(--sans)}
+  .login{max-width:420px;margin:10vh auto;background:#fff;border:1px solid var(--rule);border-top:5px solid var(--navy);padding:2.2rem}
+  .login h1{font-size:2rem;margin:.4rem 0 1.4rem}
+  .tabs{display:flex;gap:0;border-bottom:1px solid var(--rule);margin:2rem 0 1.6rem;overflow-x:auto}
+  .tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:.9rem 1.2rem;font:600 .98rem var(--sans);color:var(--muted);cursor:pointer;white-space:nowrap}
+  .tabs button[aria-selected=true]{color:var(--navy);border-bottom-color:var(--green)}
+  .tabs .count{background:var(--navy);color:#fff;border-radius:20px;padding:0 .5rem;font-size:.75rem;margin-left:.4rem}
+  .panel{display:none}.panel.on{display:block}
+  .bar{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;justify-content:space-between;margin-bottom:1rem}
+  .bar select,.bar input{font:inherit;padding:.5rem .7rem;border:1px solid #BFB8A6;background:#fff}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin-bottom:1.4rem}
+  .stats div{background:#fff;border:1px solid var(--rule);border-top:4px solid var(--navy);padding:1rem 1.2rem}
+  .stats b{display:block;font-family:var(--serif);font-size:2rem;color:var(--navy);line-height:1}
+  .stats span{font-size:.85rem;color:var(--muted)}
+  table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--rule);font-size:.94rem}
+  th{text-align:left;background:var(--stone-2);color:var(--navy);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;padding:.7rem .8rem}
+  td{padding:.75rem .8rem;border-top:1px solid var(--stone-2);vertical-align:top}
+  tr.click{cursor:pointer}tr.click:hover td{background:#FAF9F5}
+  .tw{overflow-x:auto}
+  .pill{display:inline-block;padding:.15rem .6rem;font-size:.78rem;font-weight:700;border-radius:20px;background:var(--stone-2);color:var(--navy);white-space:nowrap}
+  .pill.Received{background:#E6EEF6;color:#1D4E7A}.pill.Under{background:#FFF3D6;color:#7A5300}
+  .pill.Approved{background:#E4F2D8;color:#2F6A16}.pill.Declined{background:#F9E1DE;color:#9B2219}.pill.Withdrawn{background:#EEE;color:#555}
+  .drawer{position:fixed;inset:0;background:rgba(8,24,38,.45);display:none;z-index:80}
+  .drawer.on{display:block}
+  .drawer .sheet{position:absolute;right:0;top:0;bottom:0;width:min(640px,100%);background:#fff;overflow:auto;padding:2rem;box-shadow:-20px 0 40px -20px rgba(0,0,0,.4)}
+  .drawer h2{font-size:1.8rem;margin-bottom:.3rem}
+  .kv{display:grid;grid-template-columns:200px 1fr;gap:.45rem 1rem;font-size:.95rem;margin:1.2rem 0;border-top:1px solid var(--rule);padding-top:1rem}
+  .kv dt{font-weight:600;color:var(--navy)}
+  .kv dd{white-space:pre-wrap;word-break:break-word}
+  .x{position:absolute;right:1rem;top:1rem;background:none;border:0;font-size:1.6rem;cursor:pointer;color:var(--muted)}
+  .switch{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;background:#fff;border:1px solid var(--rule);padding:1.4rem 1.6rem;margin-bottom:1rem}
+  .switch h3{font-size:1.35rem}.switch p{color:var(--muted);font-size:.92rem}
+  .tog{position:relative;width:62px;height:34px;flex:none}
+  .tog input{opacity:0;width:0;height:0}
+  .tog span{position:absolute;inset:0;background:#C9C3B3;border-radius:34px;transition:.2s;cursor:pointer}
+  .tog span::before{content:"";position:absolute;width:26px;height:26px;left:4px;top:4px;background:#fff;border-radius:50%;transition:.2s}
+  .tog input:checked+span{background:var(--bad)}
+  #a-toggle:checked+span{background:var(--green)}
+  .tog input:checked+span::before{transform:translateX(28px)}
+  .live{font-weight:700}.live.on{color:var(--bad)}.live.off{color:var(--ok)}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:.8rem 1.4rem;font-weight:600;z-index:90;display:none}
+  .toast.on{display:block}
+  .row-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+  .sm{padding:.4rem .8rem;font-size:.85rem}
+  @media(max-width:640px){.kv{grid-template-columns:1fr}.kv dt{margin-top:.5rem}}
+</style>
+
+<header class="a-top"><div class="wrap">
+  <a class="brand" href="/"><span class="crest" role="img" aria-label="ACRI emblem"></span><span class="name">ACRI Website Admin<small>www.acriindia.org</small></span></a>
+  <div class="a-who" id="who" hidden><span id="who-name"></span><button type="button" id="logout">Sign out</button></div>
+</div></header>
+
+<main class="wrap" id="main">
+  <!-- LOGIN -->
+  <form class="login" id="login" autocomplete="off">
+    <div class="kicker">Restricted</div>
+    <h1>Sign in</h1>
+    <div class="msg err" id="login-msg" role="alert"></div>
+    <div class="field" style="margin-bottom:1rem"><label for="l-name">Your name</label><input id="l-name" required maxlength="60" placeholder="Shown in the activity log"></div>
+    <div class="field" style="margin-bottom:1.4rem"><label for="l-pass">Admin password</label><input id="l-pass" type="password" required></div>
+    <button class="btn navy" type="submit" id="l-btn" style="width:100%">Sign in</button>
+  </form>
+
+  <!-- DASHBOARD -->
+  <div id="dash" hidden>
+    <div class="tabs" role="tablist">
+      <button role="tab" aria-selected="true" data-tab="apps">Applications<span class="count" id="c-apps">0</span></button>
+      <button role="tab" aria-selected="false" data-tab="news">News</button>
+      <button role="tab" aria-selected="false" data-tab="schools">Member Schools</button>
+      <button role="tab" aria-selected="false" data-tab="settings">Site Settings</button>
+    </div>
+
+    <section class="panel on" id="p-apps" style="padding:0 0 4rem">
+      <div class="stats" id="app-stats"></div>
+      <div class="bar">
+        <div style="display:flex;gap:.6rem;flex-wrap:wrap"><select id="f-status"><option value="">All statuses</option></select><input id="f-q" placeholder="Search school, city, email"></div>
+        <button class="btn ghost sm" type="button" id="refresh">Refresh</button>
+      </div>
+      <div class="tw"><table><thead><tr><th>Reference</th><th>School</th><th>Location</th><th>Coordinator</th><th>Submitted</th><th>Status</th></tr></thead><tbody id="t-apps"></tbody></table></div>
+    </section>
+
+    <section class="panel" id="p-news" style="padding:0 0 4rem">
+      <div class="bar"><p style="color:var(--muted)">Published items appear on the home page (latest 3) and on /news. Pinned items stay first.</p><button class="btn primary sm" type="button" id="news-add">Add news</button></div>
+      <div class="tw"><table><thead><tr><th>Date</th><th>Title</th><th>Category</th><th>Status</th><th></th></tr></thead><tbody id="t-news"></tbody></table></div>
+    </section>
+
+    <section class="panel" id="p-schools" style="padding:0 0 4rem">
+      <div class="bar"><p style="color:var(--muted)">Visible schools appear on /school-network. Approving an application can add the school here automatically.</p><button class="btn primary sm" type="button" id="school-add">Add school</button></div>
+      <div class="tw"><table><thead><tr><th>School</th><th>Location</th><th>Code</th><th>Coordinator</th><th>Visible</th><th></th></tr></thead><tbody id="t-schools"></tbody></table></div>
+    </section>
+
+    <section class="panel" id="p-settings" style="padding:0 0 4rem">
+      <div class="switch"><div><h3>Maintenance mode</h3><p>When on, every public page shows the maintenance page (HTTP 503, so Google keeps your rankings). This admin page keeps working. Status: <span class="live" id="m-live"></span></p></div>
+        <label class="tog"><input type="checkbox" id="m-toggle"><span></span></label></div>
+      <div class="switch"><div><h3>School applications</h3><p>Turn off to close the /apply form. Status: <span class="live" id="a-live"></span></p></div>
+        <label class="tog"><input type="checkbox" id="a-toggle"><span></span></label></div>
+      <form class="form" id="settings-form"><fieldset><legend>Messages &amp; notifications</legend><div class="fgrid" id="settings-fields"></div>
+        <div style="margin-top:1.2rem"><button class="btn navy" type="submit">Save settings</button></div></fieldset></form>
+      <p style="color:var(--muted);font-size:.9rem;margin-top:1rem">Changes reach the live site within about a minute. Everything here also lives in the Google Sheet (tab "Settings"), so you can edit it there too.</p>
+    </section>
+  </div>
+</main>
+
+<!-- drawers -->
+<div class="drawer" id="d-app"><div class="sheet"><button class="x" data-close aria-label="Close">&times;</button><div id="d-app-body"></div></div></div>
+<div class="drawer" id="d-edit"><div class="sheet"><button class="x" data-close aria-label="Close">&times;</button><div id="d-edit-body"></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+const API="/api";
+let token=sessionStorage.getItem("acri_admin_token")||"", me=sessionStorage.getItem("acri_admin_name")||"", D=null;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const truthy=v=>v===true||/^(true|yes|1|on)$/i.test(String(v).trim());
+const toast=t=>{const e=$("#toast");e.textContent=t;e.classList.add("on");setTimeout(()=>e.classList.remove("on"),2600)};
+
+async function call(action,extra){
+  const r=await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(Object.assign({action,token},extra||{}))});
+  const d=await r.json();
+  if(d.auth===false){signOut();throw new Error(d.error)}
+  if(!d.ok)throw new Error(d.error||"Request failed");
+  return d;
+}
+
+/* ---- auth ---- */
+$("#login").addEventListener("submit",async e=>{
+  e.preventDefault();const m=$("#login-msg"),b=$("#l-btn");m.classList.remove("show");b.disabled=true;b.textContent="Signing in…";
+  try{const d=await call("admin.login",{name:$("#l-name").value,password:$("#l-pass").value});
+    token=d.token;me=d.name;sessionStorage.setItem("acri_admin_token",token);sessionStorage.setItem("acri_admin_name",me);start();}
+  catch(err){m.textContent=err.message;m.classList.add("show")}
+  finally{b.disabled=false;b.textContent="Sign in"}
+});
+function signOut(){if(token)fetch(API,{method:"POST",body:JSON.stringify({action:"admin.logout",token})}).catch(()=>{});
+  token="";sessionStorage.clear();$("#dash").hidden=true;$("#who").hidden=true;$("#login").hidden=false;}
+$("#logout").onclick=signOut;
+
+async function start(){$("#login").hidden=true;$("#dash").hidden=false;$("#who").hidden=false;$("#who-name").textContent=me;await load();}
+async function load(){try{D=await call("admin.data");renderAll()}catch(e){toast(e.message)}}
+$("#refresh").onclick=()=>load().then(()=>toast("Refreshed"));
+
+/* ---- tabs ---- */
+document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("[data-tab]").forEach(x=>x.setAttribute("aria-selected",x===b));
+  document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("on",p.id==="p-"+b.dataset.tab));
+});
+document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>b.closest(".drawer").classList.remove("on"));
+document.querySelectorAll(".drawer").forEach(d=>d.addEventListener("click",e=>{if(e.target===d)d.classList.remove("on")}));
+
+function renderAll(){renderApps();renderNews();renderSchools();renderSettings();}
+
+/* ---- applications ---- */
+const pill=s=>`<span class="pill ${esc(String(s).split(" ")[0])}">${esc(s)}</span>`;
+function renderApps(){
+  const sel=$("#f-status");if(sel.options.length<2)D.statuses.forEach(s=>sel.add(new Option(s,s)));
+  const st=sel.value,q=$("#f-q").value.toLowerCase();
+  const list=D.applications.filter(a=>(!st||a.Status===st)&&(!q||JSON.stringify(a).toLowerCase().includes(q)));
+  const count=s=>D.applications.filter(a=>a.Status===s).length;
+  $("#c-apps").textContent=count("Received");
+  $("#app-stats").innerHTML=`<div><b>${D.applications.length}</b><span>Total applications</span></div>`+D.statuses.slice(0,4).map(s=>`<div><b>${count(s)}</b><span>${s}</span></div>`).join("");
+  $("#t-apps").innerHTML=list.length?list.map(a=>`<tr class="click" data-id="${esc(a["Application ID"])}"><td><b>${esc(a["Application ID"])}</b></td><td>${esc(a["School Name"])}</td><td>${esc(a.City)}, ${esc(a.State)}</td><td>${esc(a["Coordinator Name"])}<br><small>${esc(a["Coordinator Email"])}</small></td><td>${esc(a["Submitted At"])}</td><td>${pill(a.Status)}</td></tr>`).join(""):`<tr><td colspan="6" class="empty">No applications match.</td></tr>`;
+  document.querySelectorAll("#t-apps tr.click").forEach(r=>r.onclick=()=>openApp(r.dataset.id));
+}
+$("#f-status").onchange=renderApps;$("#f-q").oninput=renderApps;
+
+const APP_FIELDS=["School Name","Board / Curriculum","City","State","Country","Address","School Website","Principal Name","Coordinator Name","Coordinator Designation","Coordinator Email","Coordinator Phone","Approx. Students Interested","Preferred Programme","Statement of Interest","Submitted At","Updated At","Updated By"];
+function openApp(id){
+  const a=D.applications.find(x=>String(x["Application ID"])===id);if(!a)return;
+  const dl=APP_FIELDS.filter(f=>a[f]!==""&&a[f]!=null).map(f=>`<dt>${esc(f)}</dt><dd>${f==="Coordinator Email"?`<a href="mailto:${esc(a[f])}">${esc(a[f])}</a>`:esc(a[f])}</dd>`).join("");
+  $("#d-app-body").innerHTML=`<div class="kicker">${esc(a["Application ID"])}</div><h2>${esc(a["School Name"])}</h2>${pill(a.Status)}<dl class="kv">${dl}</dl>
+  <form class="form" id="app-form"><fieldset><legend>Decision</legend><div class="fgrid">
+   <div class="field"><label for="ap-status">Status</label><select id="ap-status">${D.statuses.map(s=>`<option ${s===a.Status?"selected":""}>${s}</option>`).join("")}</select></div>
+   <div class="field"><label for="ap-code">School Code</label><input id="ap-code" value="${esc(a["School Code"])}" placeholder="e.g. IN-GJ380057-ABC"></div>
+   <div class="field full"><label for="ap-notes">Reviewer notes (internal)</label><textarea id="ap-notes" style="min-height:110px">${esc(a["Reviewer Notes"])}</textarea></div>
+   <div class="field full"><label class="check"><input type="checkbox" id="ap-notify" checked> <span>Email the coordinator if the status changes</span></label></div>
+   <div class="field full"><label class="check"><input type="checkbox" id="ap-add" checked> <span>If approved, add the school to the public School Network list</span></label></div>
+  </div><div style="margin-top:1.2rem"><button class="btn navy" type="submit">Save decision</button></div></fieldset></form>`;
+  $("#d-app").classList.add("on");
+  $("#app-form").onsubmit=async e=>{e.preventDefault();const b=e.target.querySelector("button");b.disabled=true;
+    try{await call("admin.updateApplication",{id,status:$("#ap-status").value,schoolCode:$("#ap-code").value,notes:$("#ap-notes").value,notify:$("#ap-notify").checked,addToNetwork:$("#ap-add").checked});
+      $("#d-app").classList.remove("on");toast("Application updated");await load();}
+    catch(err){toast(err.message)}finally{b.disabled=false}};
+}
+
+/* ---- news ---- */
+function renderNews(){
+  const list=D.news.slice().sort((a,b)=>String(b.Date).localeCompare(String(a.Date)));
+  $("#t-news").innerHTML=list.length?list.map(n=>`<tr><td>${esc(String(n.Date).slice(0,10))}</td><td><b>${esc(n.Title)}</b><br><small>${esc(n.Summary)}</small></td><td>${esc(n.Category)}</td><td>${truthy(n.Published)?'<span class="pill Approved">Published</span>':'<span class="pill Withdrawn">Hidden</span>'}${truthy(n.Pinned)?' <span class="pill Under">Pinned</span>':""}</td><td class="row-actions"><button class="btn ghost sm" data-edit="${esc(n.ID)}">Edit</button><button class="btn ghost sm" data-del="${esc(n.ID)}">Delete</button></td></tr>`).join(""):`<tr><td colspan="5" class="empty">No news yet.</td></tr>`;
+  document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>editNews(D.news.find(n=>String(n.ID)===b.dataset.edit)));
+  document.querySelectorAll("[data-del]").forEach(b=>b.onclick=async()=>{if(!confirm("Delete this news item?"))return;try{await call("admin.deleteNews",{id:b.dataset.del});toast("Deleted");load()}catch(e){toast(e.message)}});
+}
+$("#news-add").onclick=()=>editNews(null);
+function editNews(n){
+  n=n||{Published:true};
+  $("#d-edit-body").innerHTML=`<div class="kicker">News</div><h2>${n.ID?"Edit item":"Add news"}</h2>
+  <form class="form" id="news-form" style="margin-top:1rem"><div class="fgrid">
+   <div class="field full"><label>Title <i>*</i></label><input id="n-title" required maxlength="200" value="${esc(n.Title)}"></div>
+   <div class="field"><label>Date</label><input id="n-date" type="date" value="${esc(String(n.Date||new Date().toISOString()).slice(0,10))}"></div>
+   <div class="field"><label>Category</label><input id="n-cat" maxlength="60" value="${esc(n.Category)}" placeholder="Research, Publishing, Schools…"></div>
+   <div class="field full"><label>Summary</label><textarea id="n-sum" maxlength="600" style="min-height:100px">${esc(n.Summary)}</textarea></div>
+   <div class="field full"><label>Link</label><input id="n-link" maxlength="400" value="${esc(n.Link)}" placeholder="/beyond-2030 or https://…"></div>
+   <div class="field"><label class="check"><input type="checkbox" id="n-pub" ${truthy(n.Published)?"checked":""}> <span>Published</span></label></div>
+   <div class="field"><label class="check"><input type="checkbox" id="n-pin" ${truthy(n.Pinned)?"checked":""}> <span>Pinned to top</span></label></div>
+  </div><div style="margin-top:1.2rem"><button class="btn navy" type="submit">Save</button></div></form>`;
+  $("#d-edit").classList.add("on");
+  $("#news-form").onsubmit=async e=>{e.preventDefault();try{await call("admin.saveNews",{item:{id:n.ID,title:$("#n-title").value,date:$("#n-date").value,category:$("#n-cat").value,summary:$("#n-sum").value,link:$("#n-link").value,published:$("#n-pub").checked,pinned:$("#n-pin").checked}});
+    $("#d-edit").classList.remove("on");toast("Saved");load()}catch(err){toast(err.message)}};
+}
+
+/* ---- schools ---- */
+function renderSchools(){
+  $("#t-schools").innerHTML=D.schools.length?D.schools.map(s=>`<tr><td><b>${esc(s["School Name"])}</b></td><td>${esc(s.City)}, ${esc(s.State)}</td><td>${esc(s["School Code"])}</td><td>${esc(s["School Research Coordinator"])}</td><td>${truthy(s.Visible)?"Yes":"No"}</td><td><button class="btn ghost sm" data-sedit="${esc(s.ID)}">Edit</button></td></tr>`).join(""):`<tr><td colspan="6" class="empty">No schools yet.</td></tr>`;
+  document.querySelectorAll("[data-sedit]").forEach(b=>b.onclick=()=>editSchool(D.schools.find(s=>String(s.ID)===b.dataset.sedit)));
+}
+$("#school-add").onclick=()=>editSchool(null);
+function editSchool(s){
+  s=s||{Visible:true,Country:"India"};
+  const f=(id,label,key,full)=>`<div class="field${full?" full":""}"><label>${label}</label><input id="${id}" value="${esc(s[key])}"></div>`;
+  $("#d-edit-body").innerHTML=`<div class="kicker">Member school</div><h2>${s.ID?"Edit school":"Add school"}</h2>
+  <form class="form" id="school-form" style="margin-top:1rem"><div class="fgrid">
+   ${f("s-name","School name *","School Name",true)}${f("s-city","City","City")}${f("s-state","State","State")}${f("s-country","Country","Country")}${f("s-code","School Code","School Code")}
+   ${f("s-pr","Principal","Principal")}${f("s-co","School Research Coordinator","School Research Coordinator")}${f("s-addr","Address","Address",true)}
+   <div class="field full"><label class="check"><input type="checkbox" id="s-vis" ${truthy(s.Visible)?"checked":""}> <span>Visible on the public School Network page</span></label></div>
+  </div><div style="margin-top:1.2rem"><button class="btn navy" type="submit">Save</button></div></form>`;
+  $("#d-edit").classList.add("on");
+  $("#school-form").onsubmit=async e=>{e.preventDefault();try{await call("admin.saveSchool",{item:{id:s.ID,name:$("#s-name").value,city:$("#s-city").value,state:$("#s-state").value,country:$("#s-country").value,code:$("#s-code").value,principal:$("#s-pr").value,coordinator:$("#s-co").value,address:$("#s-addr").value,visible:$("#s-vis").checked}});
+    $("#d-edit").classList.remove("on");toast("Saved");load()}catch(err){toast(err.message)}};
+}
+
+/* ---- settings ---- */
+function setting(k){const s=D.settings.find(x=>x.key===k);return s?s.value:""}
+function renderSettings(){
+  const m=truthy(setting("MAINTENANCE_MODE")),a=truthy(setting("APPLICATIONS_OPEN")||"TRUE");
+  $("#m-toggle").checked=m;$("#m-live").textContent=m?"ON: public site is offline":"OFF: site is live";$("#m-live").className="live "+(m?"on":"off");
+  $("#a-toggle").checked=a;$("#a-live").textContent=a?"Open":"Closed";$("#a-live").className="live "+(a?"off":"on");
+  const fields=D.settings.filter(s=>!["MAINTENANCE_MODE","APPLICATIONS_OPEN"].includes(s.key));
+  $("#settings-fields").innerHTML=fields.map(s=>`<div class="field full"><label for="st-${s.key}">${esc(s.key.replace(/_/g," ").toLowerCase().replace(/^./,c=>c.toUpperCase()))}</label>${s.key==="MAINTENANCE_MESSAGE"?`<textarea id="st-${s.key}" style="min-height:90px">${esc(s.value)}</textarea>`:`<input id="st-${s.key}" value="${esc(s.value)}">`}<div class="hint">${esc(s.notes)}</div></div>`).join("");
+}
+async function saveSettings(values,msg){try{await call("admin.saveSettings",{values});toast(msg);await load()}catch(e){toast(e.message);await load()}}
+$("#m-toggle").onchange=e=>{const on=e.target.checked;if(on&&!confirm("Put the whole public website into maintenance mode?")){e.target.checked=false;return}
+  saveSettings({MAINTENANCE_MODE:on?"TRUE":"FALSE"},on?"Maintenance mode ON (live within ~1 min)":"Site is live again (within ~1 min)")};
+$("#a-toggle").onchange=e=>saveSettings({APPLICATIONS_OPEN:e.target.checked?"TRUE":"FALSE"},e.target.checked?"Applications opened":"Applications closed");
+$("#settings-form").onsubmit=e=>{e.preventDefault();const v={};D.settings.forEach(s=>{const el=document.getElementById("st-"+s.key);if(el)v[s.key]=el.value});saveSettings(v,"Settings saved")};
+
+if(token)start();
+})();
+</script>
